@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#E8637A">
+  <title>Maria Sin Humo 🌸</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design Tokens ─────────────────────────────────────── */
+    :root {
+      --bg:           #FDF6F0;
+      --card:         #FFFFFF;
+      --rose:         #E8637A;
+      --rose-light:   #F28B9D;
+      --rose-dark:    #C4445B;
+      --blush:        #FCE8ED;
+      --peach:        #F9A86C;
+      --peach-light:  #FDEEE3;
+      --sand:         #F5EDE4;
+      --sage:         #7BAF8E;
+      --sage-light:   #D4EBDC;
+      --gold:         #D4A843;
+      --gold-light:   #FBF0D4;
+      --text:         #2A1F1A;
+      --text-mid:     #6B5147;
+      --text-muted:   #A8907F;
+      --border:       #EFE0D6;
+      --shadow-sm:    0 2px 12px rgba(42,31,26,0.07);
+      --shadow-md:    0 6px 28px rgba(42,31,26,0.11);
+      --shadow-lg:    0 16px 48px rgba(42,31,26,0.14);
+      --radius-sm:    12px;
+      --radius-md:    20px;
+      --radius-lg:    28px;
+      --radius-pill:  999px;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 60% 40% at 80% 10%, rgba(232,99,122,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 10% 85%, rgba(249,168,108,0.07) 0%, transparent 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 16px 48px;
+    }
+
+    /* ── App Container ─────────────────────────────────────── */
+    #app {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
+      gap: 14px;
+    }
+
+    /* ── Card ──────────────────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 36px 32px 28px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.9);
+    }
+
+    /* subtle top shine */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+    }
+
+    /* ── Header ────────────────────────────────────────────── */
+    .app-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .app-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 2.6rem;
+      font-weight: 600;
+      color: var(--rose);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+    }
+
+    .app-title em {
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .title-ornament {
+      font-size: 1.6rem;
+      display: block;
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+
+    .app-tagline {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── Divider ───────────────────────────────────────────── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 22px 0;
+    }
+
+    /* ── Streak ────────────────────────────────────────────── */
+    .streak-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--sage-light);
+      color: #3D7A56;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      padding: 5px 14px;
+      margin: 16px 0 4px;
+      letter-spacing: 0.01em;
+    }
+
+    .streak-chip.gold {
+      background: var(--gold-light);
+      color: #8A6510;
+    }
+
+    .streak-hero {
+      margin: 4px 0 2px;
+    }
+
+    .streak-hero-number {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 5rem;
+      font-weight: 600;
+      color: var(--rose);
+      line-height: 1;
+      display: block;
+      animation: popIn 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+
+    .streak-hero-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+    }
+
+    /* ── Buttons ───────────────────────────────────────────── */
+    .btn-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      margin-top: 24px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      cursor: pointer;
+      padding: 17px 28px;
+      transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      letter-spacing: 0.01em;
+    }
+
+    .btn:active { transform: scale(0.96) !important; }
+    .btn:focus-visible { outline: 3px solid var(--rose); outline-offset: 3px; }
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-success {
+      background: linear-gradient(145deg, var(--rose-light), var(--rose));
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(232,99,122,0.38), inset 0 1px 0 rgba(255,255,255,0.2);
+      animation: gentle-pulse 3s ease-in-out infinite;
+    }
+
+    .btn-failure {
+      background: var(--sand);
+      color: var(--text-mid);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+
+    .btn-failure:hover { background: #EDE0D3; }
+
+    .btn-link {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      transition: color 0.15s, background 0.15s;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-link:hover { color: var(--rose); background: var(--blush); }
+
+    /* ── Main Emoji / Illustration ─────────────────────────── */
+    .hero-emoji {
+      font-size: 4.5rem;
+      display: block;
+      margin: 10px auto 16px;
+      line-height: 1;
+    }
+
+    .bounce { animation: bounce 1.8s ease-in-out infinite; }
+    .float-anim { animation: float 3.5s ease-in-out infinite; }
+
+    /* ── Quote Block ───────────────────────────────────────── */
+    .quote-block {
+      text-align: left;
+      background: var(--blush);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin: 18px 0 0;
+      position: relative;
+    }
+
+    .quote-block::before {
+      content: '\201C';
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 3.5rem;
+      color: var(--rose-light);
+      line-height: 0;
+      position: absolute;
+      top: 26px;
+      left: 14px;
+      opacity: 0.5;
+    }
+
+    .quote-text {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.6;
+      padding-left: 20px;
+    }
+
+    .quote-author {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--rose);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+
+    .quote-block.soft {
+      background: var(--peach-light);
+    }
+
+    .quote-block.soft::before { color: var(--peach); }
+    .quote-block.soft .quote-author { color: var(--peach); }
+
+    /* ── Stats ─────────────────────────────────────────────── */
+    .stats-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .stat-chip {
+      background: var(--sand);
+      border-radius: var(--radius-pill);
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .stat-chip strong { color: var(--text); }
+
+    /* ── Gentle note ───────────────────────────────────────── */
+    .gentle-note {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: var(--peach-light);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      margin-top: 12px;
+      font-weight: 500;
+      line-height: 1.5;
+      border: 1px solid rgba(249,168,108,0.25);
+    }
+
+    .failure-heading {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    /* ── History Overlay ───────────────────────────────────── */
+    .history-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      background: rgba(42,31,26,0.4);
+      backdrop-filter: blur(4px);
+      padding: 0 8px;
+    }
+
+    .history-panel {
+      background: var(--card);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      width: 100%;
+      max-width: 440px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -12px 48px rgba(42,31,26,0.16);
+      animation: slideUp 0.34s cubic-bezier(0.34,1.1,0.64,1) both;
+      overflow: hidden;
+    }
+
+    /* drag handle */
+    .panel-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 999px;
+      margin: 12px auto 0;
+      flex-shrink: 0;
+    }
+
+    .history-header {
+      padding: 14px 26px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .history-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .history-close {
+      background: var(--sand);
+      border: none;
+      border-radius: 999px;
+      width: 34px;
+      height: 34px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-mid);
+      transition: background 0.15s;
+    }
+
+    .history-close:hover { background: var(--border); }
+
+    .history-stats {
+      padding: 14px 26px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .history-list {
+      overflow-y: auto;
+      padding: 14px 26px 28px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+    }
+
+    .history-item.success-item {
+      background: var(--sage-light);
+      border: 1px solid rgba(123,175,142,0.3);
+    }
+
+    .history-item.failure-item {
+      background: var(--peach-light);
+      border: 1px solid rgba(249,168,108,0.25);
+    }
+
+    .history-item-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+    .history-item-info { flex: 1; min-width: 0; }
+
+    .history-item-label {
+      font-size: 0.85rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .history-item-date {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 1px;
+    }
+
+    .history-streak-tag {
+      flex-shrink: 0;
+      background: var(--sage);
+      color: #fff;
+      border-radius: var(--radius-pill);
+      padding: 2px 9px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .empty-history {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 32px 0;
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    /* ── Confetti ──────────────────────────────────────────── */
+    .confetti-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -12px;
+      opacity: 0;
+      animation: confettiFall var(--dur,1.8s) var(--delay,0s) ease-in forwards;
+    }
+
+    /* ── Bottom actions ────────────────────────────────────── */
+    .bottom-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .btn-back {
+      background: var(--sand);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      width: 32px;
+      height: 32px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+
+    .btn-back:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+
+    /* ── Keyframes ─────────────────────────────────────────── */
+    @keyframes gentle-pulse {
+      0%, 100% { box-shadow: 0 4px 18px rgba(232,99,122,0.38), inset 0 1px 0 rgba(255,255,255,0.2); }
+      50%       { box-shadow: 0 6px 26px rgba(232,99,122,0.55), inset 0 1px 0 rgba(255,255,255,0.2); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      45%       { transform: translateY(-12px); }
+      65%       { transform: translateY(-6px); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50%       { transform: translateY(-10px) rotate(2deg); }
+    }
+
+    @keyframes popIn {
+      0%   { transform: scale(0.3); opacity: 0; }
+      70%  { transform: scale(1.08); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(110%); }
+      to   { transform: translateY(0); }
+    }
+
+    @keyframes confettiFall {
+      0%   { transform: translateY(0) rotate(0deg) scale(1);    opacity: 1; }
+      75%  { opacity: 0.9; }
+      100% { transform: translateY(480px) rotate(680deg) scale(0.4); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in { animation: fadeIn 0.4s ease both; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    // ── Constants ────────────────────────────────────────────
+    const STORAGE_KEY = 'mariaSinHumo_entries';
+
+    // Each entry: { text, author }
+    const SUCCESS_QUOTES = [
+      {
+        text: 'No es que sea tan inteligente, es que me quedo con los problemas por más tiempo.',
+        author: 'Albert Einstein'
+      },
+      {
+        text: 'El secreto para salir adelante es comenzar.',
+        author: 'Mark Twain'
+      },
+      {
+        text: 'Caer siete veces y levantarse ocho.',
+        author: 'Proverbio japonés'
+      },
+      {
+        text: 'La fuerza no viene de la capacidad física. Viene de una voluntad indomable.',
+        author: 'Mahatma Gandhi'
+      },
+      {
+        text: 'Es muy difícil dejar de fumar. No lo sé por experiencia propia, pero como médico sé lo que significa para el cuerpo.',
+        author: 'Christiaan Barnard, primer cirujano en trasplantar un corazón'
+      },
+      {
+        text: 'Lo que no te mata, te hace más fuerte.',
+        author: 'Friedrich Nietzsche'
+      },
+      {
+        text: 'El éxito es la suma de pequeños esfuerzos repetidos día tras día.',
+        author: 'Robert Collier'
+      },
+      {
+        text: 'La única forma de hacer un gran trabajo es amar lo que haces.',
+        author: 'Steve Jobs'
+      },
+      {
+        text: 'El futuro pertenece a quienes creen en la belleza de sus sueños.',
+        author: 'Eleanor Roosevelt'
+      },
+      {
+        text: 'Nuestra mayor gloria no está en no caer nunca, sino en levantarnos cada vez que caemos.',
+        author: 'Confucio'
+      },
+    ];
+
+    const FAILURE_QUOTES = [
+      {
+        text: 'He fallado una y otra vez en mi vida. Por eso he tenido éxito.',
+        author: 'Michael Jordan'
+      },
+      {
+        text: 'El éxito es ir de fracaso en fracaso sin perder el entusiasmo.',
+        author: 'Winston Churchill'
+      },
+      {
+        text: 'No importa lo lento que vayas, siempre que no pares.',
+        author: 'Confucio'
+      },
+      {
+        text: 'Los obstáculos son esas cosas espantosas que ves cuando apartas los ojos de tu meta.',
+        author: 'Henry Ford'
+      },
+      {
+        text: 'Incluso si caes sobre tu cara, estás avanzando.',
+        author: 'Victor Kiam'
+      },
+      {
+        text: 'Siempre parece imposible hasta que se hace.',
+        author: 'Nelson Mandela'
+      },
+      {
+        text: 'La perseverancia no es una larga carrera; es muchas carreras cortas, una tras otra.',
+        author: 'Walter Elliot'
+      },
+    ];
+
+    const CONFETTI_COLORS = [
+      '#E8637A','#F9A86C','#78C487','#D4A843',
+      '#F28B9D','#7BAF8E','#FFD6E0','#FDE8C8',
+    ];
+
+    // Randomly picked each page load
+    const SUCCESS_EMOJIS = ['🎉','🌟','✨','💪','🦋','🌈','🏆','🎊','🌻','⭐','🎯','🚀','💃','🥳','🌺','🌠','🍀','💥'];
+    const FAILURE_EMOJIS = ['🌧️','☁️','🌦️','🌙','😶‍🌫️','🍂','🌊','🫧','💭','🫂','🤍','🌬️','🕊️','🧸'];
+    const HOME_EMOJIS    = ['✨','🌟','🌻','🌈','🎯','💫','🌠','🍀','🦋','⭐','🎪','🌺','🪷','🌸'];
+
+    function pickRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // ── Storage Helpers ──────────────────────────────────────
+    function getTodayString() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function getEntries() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+      catch { return []; }
+    }
+
+    function saveEntries(arr) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); } catch {}
+    }
+
+    function recordEntry(success) {
+      const today = getTodayString();
+      const entries = getEntries();
+      const idx = entries.findIndex(e => e.date === today);
+      if (idx === -1) entries.push({ date: today, success });
+      else entries[idx].success = success;
+      saveEntries(entries);
+      success ? renderSuccess(entries) : renderFailure(entries);
+    }
+
+    // ── Computations ─────────────────────────────────────────
+    function computeStreak(entries) {
+      let streak = 0;
+      for (let i = entries.length - 1; i >= 0; i--) {
+        if (entries[i].success) streak++;
+        else break;
+      }
+      return streak;
+    }
+
+    function computeLongest(entries) {
+      let longest = 0, cur = 0;
+      for (const e of entries) {
+        if (e.success) { cur++; longest = Math.max(longest, cur); }
+        else cur = 0;
+      }
+      return longest;
+    }
+
+    // ── Utilities ─────────────────────────────────────────────
+    function getQuote(arr) {
+      const seed = getTodayString().replace(/-/g,'');
+      return arr[parseInt(seed, 10) % arr.length];
+    }
+
+    function formatDate(dateString) {
+      const [y,m,d] = dateString.split('-').map(Number);
+      return new Date(y, m-1, d).toLocaleDateString('es-ES', {
+        weekday: 'long', day: 'numeric', month: 'long'
+      });
+    }
+
+    function streakChipHTML(streak) {
+      const isGold = streak >= 7;
+      const cls = isGold ? 'streak-chip gold' : 'streak-chip';
+      const icon = isGold ? '✨' : '🌿';
+      const label = streak === 1 ? 'día seguido' : 'días seguidos';
+      return `<div class="${cls}">${icon} ${streak} ${label}</div>`;
+    }
+
+    function statsHTML(entries) {
+      const successes = entries.filter(e => e.success).length;
+      const longest = computeLongest(entries);
+      return `
+        <div class="stats-row">
+          <div class="stat-chip">📅 <strong>${entries.length}</strong> días registrados</div>
+          <div class="stat-chip">⭐ <strong>${successes}</strong> éxitos</div>
+          <div class="stat-chip">🏆 Récord <strong>${longest}</strong></div>
+        </div>`;
+    }
+
+    function historyBtnHTML(showChange = false) {
+      return `
+        <div class="bottom-actions">
+          ${showChange ? `<button class="btn-back" onclick="changeToday()" aria-label="Volver">←</button>` : ''}
+          <button class="btn-link" onclick="renderHistory()">Ver mi historial →</button>
+        </div>`;
+    }
+
+    function quoteBlockHTML(q, soft = false) {
+      return `
+        <div class="quote-block ${soft ? 'soft' : ''}">
+          <p class="quote-text">${q.text}</p>
+          <p class="quote-author">— ${q.author}</p>
+        </div>`;
+    }
+
+    function createConfetti(container) {
+      for (let i = 0; i < 22; i++) {
+        const p = document.createElement('span');
+        p.className = 'confetti-piece';
+        const size = 7 + Math.random() * 7;
+        const isRound = Math.random() > 0.45;
+        p.style.cssText = `
+          left:${Math.random()*100}%;
+          width:${size}px; height:${size}px;
+          background:${CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)]};
+          border-radius:${isRound ? '50%' : '3px'};
+          --delay:${(Math.random()*0.7).toFixed(2)}s;
+          --dur:${(1.5+Math.random()*1).toFixed(2)}s;
+        `;
+        container.appendChild(p);
+      }
+    }
+
+    // ── Render Functions ──────────────────────────────────────
+
+    function renderButtons(entries) {
+      const streak = computeStreak(entries);
+      const homeEmoji = pickRandom(HOME_EMOJIS);
+      document.getElementById('app').innerHTML = `
+        <div class="card fade-in">
+          <span class="title-ornament">${homeEmoji}</span>
+          <h1 class="app-title">Maria <em>Sin Humo</em></h1>
+          <p class="app-tagline">¿Cómo fue hoy?</p>
+          ${streak > 0 ? `<div style="margin-top:14px">${streakChipHTML(streak)}</div>` : '<div style="height:16px"></div>'}
+          <div class="btn-row">
+            <button class="btn btn-success" id="btnSuccess">🎉 &nbsp;¡Lo conseguí!</button>
+            <button class="btn btn-failure" id="btnFailure">☁️ &nbsp;No es mi día</button>
+          </div>
+          <div class="divider"></div>
+          ${statsHTML(entries)}
+          ${historyBtnHTML()}
+        </div>`;
+
+      document.getElementById('btnSuccess').addEventListener('click', () => recordEntry(true));
+      document.getElementById('btnFailure').addEventListener('click', () => recordEntry(false));
+    }
+
+    function renderSuccess(entries) {
+      const streak = computeStreak(entries);
+      const q = getQuote(SUCCESS_QUOTES);
+      const successEmoji = pickRandom(SUCCESS_EMOJIS);
+      document.getElementById('app').innerHTML = `
+        <div class="card fade-in" id="successCard">
+          <div class="confetti-container" id="confetti"></div>
+          <h1 class="app-title">Maria <em>Sin Humo</em></h1>
+          <span class="hero-emoji bounce">${successEmoji}</span>
+          <div class="streak-hero">
+            <span class="streak-hero-number">${streak}</span>
+            <span class="streak-hero-label">${streak === 1 ? 'día sin humo' : 'días sin humo'}</span>
+          </div>
+          ${streak >= 7 ? `<div style="margin-top:10px"><div class="streak-chip gold">✨ ¡Racha extraordinaria!</div></div>` : `<div style="margin-top:10px">${streakChipHTML(streak)}</div>`}
+          ${quoteBlockHTML(q)}
+          <div class="divider"></div>
+          ${statsHTML(entries)}
+          ${historyBtnHTML(true)}
+        </div>`;
+
+      requestAnimationFrame(() => {
+        const c = document.getElementById('confetti');
+        if (c) createConfetti(c);
+      });
+    }
+
+    function renderFailure(entries) {
+      const q = getQuote(FAILURE_QUOTES);
+      const longest = computeLongest(entries);
+      const failureEmoji = pickRandom(FAILURE_EMOJIS);
+      document.getElementById('app').innerHTML = `
+        <div class="card fade-in">
+          <h1 class="app-title">Maria <em>Sin Humo</em></h1>
+          <span class="hero-emoji float-anim">${failureEmoji}</span>
+          <p class="failure-heading">No pasa nada, Maria.</p>
+          <p class="app-tagline" style="margin-bottom:4px">Mañana es un nuevo comienzo.</p>
+          ${quoteBlockHTML(q, true)}
+          ${longest > 0 ? `<div class="gentle-note">Tu mejor racha fue de <strong>${longest} días</strong> — y puedes superarla. 🌱</div>` : ''}
+          <div class="divider"></div>
+          ${statsHTML(entries)}
+          ${historyBtnHTML(true)}
+        </div>`;
+    }
+
+    function renderHistory() {
+      const entries = getEntries();
+      const streak = computeStreak(entries);
+      const longest = computeLongest(entries);
+      const successes = entries.filter(e => e.success).length;
+
+      const itemsHTML = entries.length === 0
+        ? `<div class="empty-history">✨ Aún no hay entradas.<br><small>Vuelve aquí después de tu primer día.</small></div>`
+        : [...entries].reverse().map((e, i, arr) => {
+            // compute running streak at this historical point
+            let s = 0;
+            for (let j = i; j < arr.length; j++) {
+              if (arr[j].success) s++; else break;
+            }
+            const streakTag = e.success && s > 1 ? `<span class="history-streak-tag">🔥 ${s}</span>` : '';
+            return `
+              <div class="history-item ${e.success ? 'success-item' : 'failure-item'}">
+                <span class="history-item-icon">${e.success ? pickRandom(SUCCESS_EMOJIS) : pickRandom(FAILURE_EMOJIS)}</span>
+                <div class="history-item-info">
+                  <div class="history-item-label">${e.success ? '¡Lo conseguí!' : 'No fue mi día'}</div>
+                  <div class="history-item-date">${formatDate(e.date)}</div>
+                </div>
+                ${streakTag}
+              </div>`;
+          }).join('');
+
+      const overlay = document.createElement('div');
+      overlay.className = 'history-overlay';
+      overlay.id = 'historyOverlay';
+      overlay.innerHTML = `
+        <div class="history-panel">
+          <div class="panel-handle"></div>
+          <div class="history-header">
+            <span class="history-title">Tu camino 🌈</span>
+            <button class="history-close" onclick="closeHistory()" aria-label="Cerrar">✕</button>
+          </div>
+          <div class="history-stats">
+            <div class="stat-chip">📅 <strong>${entries.length}</strong> días</div>
+            <div class="stat-chip">⭐ <strong>${successes}</strong> éxitos</div>
+            <div class="stat-chip">🔥 Racha <strong>${streak}</strong></div>
+            <div class="stat-chip">🏆 Récord <strong>${longest}</strong></div>
+          </div>
+          <div class="history-list">${itemsHTML}</div>
+        </div>`;
+
+      overlay.addEventListener('click', e => { if (e.target === overlay) closeHistory(); });
+      document.body.appendChild(overlay);
+    }
+
+    function closeHistory() {
+      document.getElementById('historyOverlay')?.remove();
+    }
+
+    // ── Change today's entry ──────────────────────────────────
+    function changeToday() {
+      const today = getTodayString();
+      const entries = getEntries();
+      const idx = entries.findIndex(e => e.date === today);
+      if (idx !== -1) entries.splice(idx, 1);
+      saveEntries(entries);
+      renderButtons(entries);
+    }
+
+    // ── Init ──────────────────────────────────────────────────
+    function init() {
+      const entries = getEntries();
+      const todayEntry = entries.find(e => e.date === getTodayString());
+      if (todayEntry !== undefined) {
+        todayEntry.success ? renderSuccess(entries) : renderFailure(entries);
+      } else {
+        renderButtons(entries);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
